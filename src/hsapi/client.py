@@ -1,19 +1,21 @@
+from datetime import datetime,timedelta
 from yaml import safe_load
 import requests
-from datetime import datetime,timedelta
 
 API_BASE_URL = 'https://us.api.blizzard.com/hearthstone'
 
 class OAuthAcquisitionException(Exception):
     """
-    `OAuthAcquisitionException` is raised when we are uanble to retrieve an OAuth token with the provided credentials
+    `OAuthAcquisitionException` is raised when we are uanble to retrieve an OAuth token with the
+    provided credentials
     """
-    pass
+
 
 # TODO: Break this down into better errors
 class APIException(Exception):
     """
-    `APIException` is raised when a 400 response is received when attempting to query the Hearthstone API
+    `APIException` is raised when a 400 response is received when attempting to query the
+    Hearthstone API
     """
 
 
@@ -25,9 +27,9 @@ class OAuthToken:
     def __init__(self, token, expiration_seconds):
         self.token = token
         self.expires_on = datetime.now() + timedelta(seconds=expiration_seconds)
-    
+
     def is_expired(self) -> bool:
-        datetime.now() > self.expires_on
+        return datetime.now() > self.expires_on
 
 
 class HSApiClient:
@@ -41,18 +43,19 @@ class HSApiClient:
         self.locale = locale
         self.page_size = page_size
 
-        with open('../credentials.yml', 'r') as creds_file:
+        with open('../credentials.yml', 'r', encoding='utf-8') as creds_file:
             credentials = safe_load(creds_file)
             self.client_id = credentials['client_id']
             self.client_secret = credentials['client_secret']
-        
-        # Get an OAuth Token
-        # curl -u {client_id}:{client_secret} -d grant_type=client_credentials https://us.battle.net/oauth/token
+
+        # Get an OAuth Token - example curl request:
+        # curl -u {client_id}:{client_secret} -d grant_type=client_credentials
+        # https://us.battle.net/oauth/token
         response = requests.post(
             'https://us.battle.net/oauth/token',
             auth=(self.client_id, self.client_secret),
             data={"grant_type": "client_credentials"})
-        
+
         if not response.ok:
             raise OAuthAcquisitionException(f"Unable to obtain OAuth token: {response.content}")
 
@@ -61,7 +64,7 @@ class HSApiClient:
 
         # Retrieve HS metadata
         self.metadata = HSApiMetadata(self.region, self.locale, self.oauth_token)
-    
+
     def search(self, **args):
         args['access_token'] = self.oauth_token.token
         args['region'] = self.region
@@ -79,17 +82,16 @@ class HSApiMetadata:
     """
     Container class used to hold card metadata
     """
-
     def __init__(self, region, locale, oauth_token):
         response = requests.get(
             f"{API_BASE_URL}/metadata",
             params={'access_token': oauth_token.token, 'locale': locale, 'region': region})
-        
+
         if not response.ok:
             raise APIException(response.content)
-        
+
         response_json = response.json()
-        
+
         # Store each metadata type in a dictionary by ID for faster lookup
         self.types = { i['id']: i  for i in response_json['types'] }
         self.rarities = { i['id']: i  for i in response_json['rarities'] }
