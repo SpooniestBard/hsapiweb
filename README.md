@@ -1,4 +1,4 @@
-# `hsapiweb` - 
+# `hsapiweb` - (Please hire me)
 This is a library and Flask UI for querying the Hearthstone card search API
 
 ## Setup Instructions
