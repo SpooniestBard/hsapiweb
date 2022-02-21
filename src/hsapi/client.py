@@ -1,5 +1,4 @@
 from yaml import safe_load
-import logging
 import requests
 from datetime import datetime,timedelta
 
@@ -29,6 +28,7 @@ class HSApiClient:
     Hearthstone API client. Documentation can be found at
     https://develop.battle.net/documentation/hearthstone/game-data-apis
     """
+    API_BASE_URL = 'https://us.api.blizzard.com/hearthstone'
 
     SEARCH_ALLOWED_FILTERS= [
         "set",
@@ -69,13 +69,12 @@ class HSApiClient:
         self.oauth_token = OAuthToken(response_json['access_token'], response_json['expires_in'])
     
     def search(self, **args):
-        #TODO: Implement search
-        print(args)
+        args['access_token'] = self.oauth_token.token
+        args['region'] = self.region
+        args['locale'] = self.locale
+        response = requests.get(f"{self.API_BASE_URL}/cards", params=args)
 
-
-def main():
-    api_client = HSApiClient()
-    api_client.search(test='test_value')
-
-if __name__ == "__main__":
-    main()
+        if not response.ok:
+            # TODO: Error handling
+            pass
+        return response.json()['cards']
