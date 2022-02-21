@@ -1,3 +1,4 @@
 credentials.yml
 env/
+__pycache__/
 
