@@ -1,0 +1,7 @@
+{% macro multiselect_int(field_name, default_selections) -%}
+        <select multiple name="{{ field_name }}">
+        {% for i in range(11) %}
+            <option {% if i in default_selections %}selected{% endif %} value={{ i }}>{{ i }}</option>
+        {% endfor %}
+        </select><br>
+{%- endmacro %}

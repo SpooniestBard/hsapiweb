@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    </head>
+    <body>
+{% include 'search_form.j2' %}
+
+{% include 'results.j2' %}
+    </body>
+</html>

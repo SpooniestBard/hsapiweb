@@ -1,0 +1,38 @@
+{% import 'forms.j2' as forms %}
+    <form action="{{ url_for('search') }}" method="POST"> 
+        <label for="set">Set:</label>
+        <input type="text" id="set" name="set"><br>
+        <label for="class">Class:</label>
+        <select multiple name="class">
+            <option value="demonhunter">Demon Hunter</option>
+            <option selected value="druid">Druid</option>
+            <option value="hunter">Hunter</option>
+            <option value="mage">Mage</option>
+            <option value="paladin">Paladin</option>
+            <option value="priest">Priest</option>
+            <option value="rogue">Rogue</option>
+            <option value="shaman">Shaman</option>
+            <option selected value="warlock">Warlock</option>
+            <option value="warrior">Warrior</option>
+        </select><br>
+        <label for="manaCost">Mana Cost:</label>
+        {{ forms.multiselect_int("manaCost", [7,8,9,10]) }}
+        <label for="attack">Attack:</label>
+        {{ forms.multiselect_int("attack") }}
+        <label for="health">Health:</label>
+        {{ forms.multiselect_int("health") }}
+        <label for="collectible">Collectible:</label>
+        <input type="checkbox" id="collectible" name="collectible"><br>
+        <label for="rarity">Rarity:</label>
+        <input type="text" id="rarity" name="rarity" value="legendary"><br>
+        <label for="type">Type:</label>
+        <input type="text" id="type" name="type"><br>
+        <label for="minionType">Minion Type:</label>
+        <input type="text" id="minionType" name="minionType"><br>
+        <label for="keyword">Keyword:</label>
+        <input type="text" id="keyword" name="keyword"><br>
+        <label for="textFilter">Text Filter:</label>
+        <input type="text" id="textFilter" name="textFilter"><br>
+
+        <input type="submit" value="Submit" />
+    </form>

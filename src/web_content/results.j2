@@ -1,0 +1,35 @@
+{% if cards is defined and cards|length > 0 %}
+
+{% if cards|length > 0 %}
+<table>
+    <thead>
+        <tr>
+            <th>Card Art</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Rarity</th>
+            <th>Set</th>
+            <th>Class</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for card in cards %}
+        <tr>
+            <td>
+                <img src={{ card.art }} alt="{{ card['name'] }} card art">
+            </td>
+            <td>{{ card.name }}</td>
+            <td>{{ card.type }}</td>
+            <td>{{ card.rarity }}</td>
+            <td>{{ card.set }}</td>
+            <td>{{ card.card_class }}</td>
+        </tr>
+    {% endfor %}
+    <tbody>
+</table>
+
+{% else %}
+<strong>Your search didn't return any results. Check your query and try again</strong>
+{% endif %}
+
+{% endif %}
